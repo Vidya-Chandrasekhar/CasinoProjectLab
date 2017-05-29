@@ -3,18 +3,48 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Index</title>
-
+  <title>Vidya's Casino</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <!-- include source files here... -->
   <script src="src/blackjack.js"></script>
-
 </head>
-<h2>Welcome to Vidya's Casino Game</h2>
-<button onclick="userInput()">Start the  Game</button>
-<p id="feed_back_id"></p>
 
 <body>
+
+  <img src="http://www.gamblingsupport.org/wp-content/uploads/2015/12/Counting-Cards-in-Blackjack.png" class="img-circle" alt="Cinque Terre" width="304" height="236">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h3>Welcome to Vidya's Casino !</h3></div>
+    <div class="col-md-3"></div>
+  </div>
+  </br>
+  </br>
+  </br>
+  <div class="row">
+    <div class="col-md-2"></div>
+      <div class="col-md-2" id="start_id"><button onclick="main()" type="button" class="btn btn-primary btn-block btn-lg">Start Game</button></div>
+      <div class="col-md-2" id="hit_id"><button onclick="hit()" type="button" class="btn  btn-success btn-block btn-lg">Hit</button></div>
+      <div class="col-md-2" id="stand_id"><button onclick="stand()" type="button" class="btn  btn-warning btn-block btn-lg">Stand</button></div>
+      <div class="col-md-2" id="stand_id"><button onclick="exitGame()" type="button" class="btn  btn-danger btn-block btn-lg">Exit Game</button></div>
+    <div class="col-md-2"></div>
+  </div>
+  </br>
+  </br>
+  </br>
+
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div style="background: #ffcc00;"  id="text_display"  class="col-md-6">
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+
 </body>
 
 </html>
