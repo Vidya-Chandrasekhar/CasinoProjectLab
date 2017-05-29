@@ -78,6 +78,7 @@ function Player(name) {
   this.emptyHand = function() {
     this.cardHand = [];
     this.cardHandCurrentIndex = 0;
+
   }
   //addCard Method
   this.addCard = function(card) {
@@ -146,14 +147,17 @@ var user = null;
 var dealer = null;
 var displayConsole = null;
 var deck = null;
-var initialAmount = 0.00;
+var despositAmount = 0.00;
 var betAmount = 0.00;
 var currentAmount = 0.00;
 
 function GameRunner() {
   console.log("GameRunner created");
   this.runGame = function() {
-    betAmount = prompt("Please enter your bet amount:", 0.00 );
+    betAmount = prompt("Please enter your bet amount (should be less than or equal to your current Amount): ", 0.00 );
+    while  (betAmount > currentAmount){
+      betAmount = prompt("Please enter your bet amount : ", 0.00 );
+    }
     currentAmount= currentAmount - betAmount;
     displayCurrentAndBetAmount(currentAmount,betAmount);
     deck = new Deck(1, true);
@@ -191,7 +195,6 @@ function updateWinDisplay() {
 }
 
 function updateLossDisplay() {
-  currentAmount = currentAmount - betAmount;
   betAmount =0.00 ;
   displayCurrentAndBetAmount(currentAmount,0.00);
   displayConsole.cleanDisplay();
@@ -292,8 +295,8 @@ function exitGame() {
   }
 }
 
-function displayInitialAmount(initialAmount) {
-  document.getElementById("initial-amount-id").innerHTML = "Initial Amount : " + initialAmount;
+function displayInitialAmount(despositAmount) {
+  document.getElementById("initial-amount-id").innerHTML = "Desposit Amount : " + despositAmount;
 }
 
 function displayCurrentAndBetAmount(currentAmount, betAmount) {
@@ -305,12 +308,11 @@ document.getElementById("bet-amount-id").innerHTML = "Bet Amount : " + parseInt(
 function enterNameAmount() {
   var userName = document.getElementById("name-input-id").value;
   user = new Player(userName);
-  initialAmount = document.getElementById("deposit-amount-input-id").value;
-
-
-  currentAmount = currentAmount + initialAmount;
-  displayInitialAmount(initialAmount);
+  despositAmount = parseFloat(document.getElementById("deposit-amount-input-id").value);
+  currentAmount = currentAmount + despositAmount;
+  displayInitialAmount(despositAmount);
   displayCurrentAndBetAmount(currentAmount, betAmount);
+  document.getElementById("deposit-amount-input-id").value=0;
   showElementById("start_id");
 
 }
