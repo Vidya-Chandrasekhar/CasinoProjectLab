@@ -10,41 +10,58 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <!-- include source files here... -->
-  <script src="src/blackjack.js"></script>
 </head>
 
 <body>
-
-  <img src="http://www.gamblingsupport.org/wp-content/uploads/2015/12/Counting-Cards-in-Blackjack.png" class="img-circle" alt="Cinque Terre" width="304" height="236">
   <div class="row">
+    <div class="col-md-5">
+      <img src="http://www.gamblingsupport.org/wp-content/uploads/2015/12/Counting-Cards-in-Blackjack.png" class="img-circle" alt="Cinque Terre" width="304" height="236">
+    </div>
+    <div class="col-md-7">
+      <h3>Welcome to Vidya's Casino !</h3></div>
+  </div>
+
+  <!-- Form for enter Name and betting amount-->
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <form>
+      <div class="form-group row">
+        <label for="player-name" class="col-2 col-form-label">Enter Name</label>
+        <input class="form-control" type="text" value="Guest" id="name-input-id"></input>
+      </div>
+      <div class="form-group row">
+        <label for="deposit-amount" class="col-2 col-form-label">Enter Deposit Amount </label>
+        <input class="form-control" type="number" value="0" id="deposit-amount-input-id"></input>
+      </div>
+
+    </form>
     <div class="col-md-3"></div>
     <div class="col-md-6">
-      <h3>Welcome to Vidya's Casino !</h3></div>
-    <div class="col-md-3"></div>
-  </div>
-  </br>
-  </br>
-  </br>
-  <div class="row">
-    <div class="col-md-2"></div>
-      <div class="col-md-2" id="start_id"><button onclick="main()" type="button" class="btn btn-primary btn-block btn-lg">Start Game</button></div>
-      <div class="col-md-2" id="hit_id"><button onclick="hit()" type="button" class="btn  btn-success btn-block btn-lg">Hit</button></div>
-      <div class="col-md-2" id="stand_id"><button onclick="stand()" type="button" class="btn  btn-warning btn-block btn-lg">Stand</button></div>
-      <div class="col-md-2" id="stand_id"><button onclick="exitGame()" type="button" class="btn  btn-danger btn-block btn-lg">Exit Game</button></div>
-    <div class="col-md-2"></div>
-  </div>
-  </br>
-  </br>
-  </br>
-
-  <div class="row">
-    <div class="col-md-3"></div>
-    <div style="background: #ffcc00;"  id="text_display"  class="col-md-6">
+      <div id="enter_amount_btn_id"><button onclick="enterNameAmount()" type="button" class="btn btn-primary btn-block btn-lg">Enter The Casino</button></div>
     </div>
     <div class="col-md-3"></div>
   </div>
 
+  <div class="row" id="casino-control-btn-grp-id">
+    <div class="col-md-2"></div>
+    <div class="col-md-2" id="start_id"><button onclick="main()" type="button" class="btn btn-primary btn-block btn-lg">Start Game</button></div>
+    <div class="col-md-2" id="hit_id"><button onclick="hit()" type="button" class="btn  btn-success btn-block btn-lg">Hit</button></div>
+    <div class="col-md-2" id="stand_id"><button onclick="stand()" type="button" class="btn  btn-warning btn-block btn-lg">Stand</button></div>
+    <div class="col-md-2" id="exit_game_id"><button onclick="exitGame()" type="button" class="btn  btn-danger btn-block btn-lg">Exit Game</button></div>
+    <div class="col-md-2"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div style="background: #ffcc00;" id="text_display" class="col-md-6">
+    </div>
+    <div class="col-md-3">
+      <div class="alert alert-info" id="initial-amount-id" role="alert">Initial Amount: 0</div>
+      <div class="alert alert-warning" id="current-amount-id" role="alert">Current Amount: 0 </div>
+      <div class="alert alert-warning" id="bet-amount-id" role="alert">Bet Amount: 0</div>
+    </div>
+  </div>
 </body>
+<!-- include source files here... -->
+<script src="src/blackjack.js"></script>
 
 </html>

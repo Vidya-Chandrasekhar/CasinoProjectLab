@@ -77,6 +77,7 @@ function Player(name) {
   this.cardHandCurrentIndex = 0;
   this.emptyHand = function() {
     this.cardHand = [];
+    this.cardHandCurrentIndex = 0;
   }
   //addCard Method
   this.addCard = function(card) {
@@ -116,16 +117,6 @@ function Player(name) {
   }
 }
 
-function userInput() {
-  var txt = "";
-  var person = prompt("Please enter your name:", "Harry Potter");
-  if (person == null || person == "") {
-    txt = "User cancelled the prompt.";
-  } else {
-    txt = "Hello " + person + "! How are you today?";
-  }
-  document.getElementById("demo").innerHTML = txt;
-}
 
 //a class to print info into the browser
 function DisplayConsole() {
@@ -136,6 +127,7 @@ function DisplayConsole() {
   }
   this.cleanDisplay = function() {
     txt = "";
+    document.getElementById("text_display").innerHTML = txt;
   }
 }
 
@@ -147,25 +139,24 @@ function showElementById(domId) {
   document.getElementById(domId).style.visibility = 'visible';
 }
 
+
 //This is the main driver class that co-ordinates the game
 
 var user = null;
 var dealer = null;
 var displayConsole = null;
 var deck = null;
+var initialAmount = 0.00;
+var betAmount = 0.00;
+var currentAmount = 0.00;
 
 function GameRunner() {
-  //player OBejcts initialization
-  // var deck = null;
-  // var user = null;
-  // var dealer = null;
-  // var displayConsole = null;
   console.log("GameRunner created");
   this.runGame = function() {
-
+    betAmount = prompt("Please enter your bet amount:", 0.00 );
+    currentAmount= currentAmount - betAmount;
+    displayCurrentAndBetAmount(currentAmount,betAmount);
     deck = new Deck(1, true);
-    var userName = prompt("Please enter your name:");
-    user = new Player(userName);
     dealer = new Player("dealer");
     displayConsole = new DisplayConsole();
     //give 2 cards each to the UserPlayer and dealer and create for-loop
@@ -173,9 +164,10 @@ function GameRunner() {
       user.addCard(deck.dealNextCard());
       dealer.addCard(deck.dealNextCard());
     }
-    //
+
     displayConsole.displayOnScreen("These are the cards for Player :" + user.name + "</br>" + user.getCardOnHand());
     if (user.sumOfHand() == 21) {
+      updateWinDisplay();
       displayConsole.displayOnScreen("</br>Congratulations " + user.name + " you won the Blackjack game!!");
     } else {
       hideElementById("start_id");
@@ -185,6 +177,27 @@ function GameRunner() {
 
     }
   }
+}
+
+
+function updateWinDisplay() {
+  currentAmount = currentAmount + betAmount*2;
+  betAmount =0.00 ;
+  displayCurrentAndBetAmount(currentAmount,0.00);
+  displayConsole.cleanDisplay();
+  user.emptyHand();
+  dealer.emptyHand();
+  deck = new Deck(1, true);
+}
+
+function updateLossDisplay() {
+  currentAmount = currentAmount - betAmount;
+  betAmount =0.00 ;
+  displayCurrentAndBetAmount(currentAmount,0.00);
+  displayConsole.cleanDisplay();
+  user.emptyHand();
+  dealer.emptyHand();
+  deck = new Deck(1, true);
 }
 var gameRunner = new GameRunner();
 
@@ -197,12 +210,14 @@ function hit() {
     showElementById("start_id");
     hideElementById("hit_id");
     hideElementById("stand_id");
+    updateWinDisplay();
     displayConsole.displayOnScreen("</br>Congratulations " + user.name + " you won the Blackjack game!!");
     displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
-  } else if (sumOfCards > 21) {
+    } else if (sumOfCards > 21) {
     showElementById("start_id");
     hideElementById("hit_id");
     hideElementById("stand_id");
+    updateLossDisplay();
     displayConsole.displayOnScreen("You point is " + sumOfCards + ". You are BUSTED " + user.name + ".");
     displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
   } else {
@@ -214,11 +229,11 @@ function hit() {
   }
 }
 
-function displayDealerAndUserCards(){
+function displayDealerAndUserCards() {
   displayConsole.displayOnScreen("These are the cards for Player : " + user.name + "</br>" + user.getCardOnHand());
-  displayConsole.displayOnScreen(user.name + " Sum : "  + user.sumOfHand() +"</br></br>");
+  displayConsole.displayOnScreen(user.name + " Sum : " + user.sumOfHand() + "</br></br>");
   displayConsole.displayOnScreen("These are the cards for Dealer : </br>" + dealer.getCardOnHand());
-  displayConsole.displayOnScreen("Dealer Sum  : "  + dealer.sumOfHand() +"</br>");
+  displayConsole.displayOnScreen("Dealer Sum  : " + dealer.sumOfHand() + "</br>");
 }
 
 
@@ -227,33 +242,40 @@ function stand() {
   var sumOfUserCards = user.sumOfHand();
   displayConsole.cleanDisplay();
   displayDealerAndUserCards();
-  while(true){
-  if (sumOfDealerCards == 21){
-    showElementById("start_id");
-    hideElementById("hit_id");
-    hideElementById("stand_id");
-    displayConsole.displayOnScreen("Dealer Sum  : "  + dealer.sumOfHand() +"</br></br>");
-    displayConsole.displayOnScreen("Dealer Won !!!"+ user.name + " Lost");
-    displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
-    break;
-  } else  if (sumOfDealerCards > 21){
-    displayConsole.displayOnScreen("Dealer Sum  : "  + dealer.sumOfHand() +"</br></br>");
-    displayConsole.displayOnScreen("Dealer Lost "+ user.name + " Won !!!");
-    displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
-    break;
-  } else if (sumOfDealerCards > sumOfUserCards ) {
-    displayConsole.displayOnScreen("Dealer Sum  : "  + dealer.sumOfHand() +"</br></br>");
-    displayConsole.displayOnScreen("Dealer Won !!!"+ user.name + " Lost the Blackjack game!! ");
-    displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
-    break;
-  } else {
-    var dealerNextCard = deck.dealNextCard();
-    dealer.addCard(dealerNextCard);
-    sumOfDealerCards = dealer.sumOfHand();
-    displayConsole.displayOnScreen("Dealer draws next card "+ dealerNextCard.toString()+"</br>");
+  while (true) {
+    if (sumOfDealerCards == 21) {
+      showElementById("start_id");
+      hideElementById("hit_id");
+      hideElementById("stand_id");
+      displayConsole.displayOnScreen("Dealer Sum  : " + dealer.sumOfHand() + "</br></br>");
+      updateLossDisplay();
+      displayConsole.displayOnScreen("Dealer Won !!!" + user.name + " Lost");
+      displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
+      showElementById("start_id");
+      break;
+    } else if (sumOfDealerCards > 21) {
+      displayConsole.displayOnScreen("Dealer Sum  : " + dealer.sumOfHand() + "</br></br>");
+      updateWinDisplay();
+      displayConsole.displayOnScreen("Dealer Lost " + user.name + " Won !!!");
+      displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
+      showElementById("start_id");
+      break;
+    } else if (sumOfDealerCards > sumOfUserCards) {
+      displayConsole.displayOnScreen("Dealer Sum  : " + dealer.sumOfHand() + "</br></br>");
+      updateLossDisplay();
+      displayConsole.displayOnScreen("Dealer Won !!!" + user.name + " Lost the Blackjack game!! ");
+      displayConsole.displayOnScreen("Click 'Start Game' to Play again or 'Exit Game' to end Play ");
+      showElementById("start_id");
+      break;
+    } else {
+      var dealerNextCard = deck.dealNextCard();
+      dealer.addCard(dealerNextCard);
+      sumOfDealerCards = dealer.sumOfHand();
+      displayConsole.displayOnScreen("Dealer draws next card " + dealerNextCard.toString() + "</br>");
+    }
   }
 }
-}
+
 function exitGame() {
   hideElementById("hit_id");
   hideElementById("stand_id");
@@ -263,22 +285,43 @@ function exitGame() {
     displayConsole = new DisplayConsole();
   }
   displayConsole.cleanDisplay();
-    if (user == null) {
-      displayConsole.displayOnScreen("Bye See you soon. Please close the window.");
-    } else {
-      displayConsole.displayOnScreen("Bye " + user.name + ". Thank you for playing. See you soon. Please close the window.");
-    }
+  if (user == null) {
+    displayConsole.displayOnScreen("Bye See you soon. Please close the window.");
+  } else {
+    displayConsole.displayOnScreen("Bye " + user.name + ". Thank you for playing. See you soon. Please close the window.");
+  }
+}
+
+function displayInitialAmount(initialAmount) {
+  document.getElementById("initial-amount-id").innerHTML = "Initial Amount : " + initialAmount;
+}
+
+function displayCurrentAndBetAmount(currentAmount, betAmount) {
+document.getElementById("current-amount-id").innerHTML = "Current Amount : " + parseInt(currentAmount, 10) ;
+document.getElementById("bet-amount-id").innerHTML = "Bet Amount : " + parseInt(betAmount, 10) ;
+}
+
+
+function enterNameAmount() {
+  var userName = document.getElementById("name-input-id").value;
+  user = new Player(userName);
+  initialAmount = document.getElementById("deposit-amount-input-id").value;
+
+
+  currentAmount = currentAmount + initialAmount;
+  displayInitialAmount(initialAmount);
+  displayCurrentAndBetAmount(currentAmount, betAmount);
+  showElementById("start_id");
+
 }
 
 function main() {
-  //  gameRunner = new GameRunner();
+  // gameRunner = new GameRunner();
+  if (displayConsole !== null) {
+    displayConsole.cleanDisplay();
+  }
   this.gameRunner.runGame();
 }
-// all test
-// //Create an instance of card.
-//var card1 = new Card(Suit.Club, 1);
-//var card2 = new Card(Suit.Diamond, 2);
-//console.log("created card1 " + card1);
-//console.log("created card2  " + card2);
-//var deck1 = new Deck(1, false);
-// console.log("created Deck with size  " + deck1.cardsArray);
+hideElementById("hit_id");
+hideElementById("stand_id");
+hideElementById("start_id");
